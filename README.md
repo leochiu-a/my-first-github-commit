@@ -1,40 +1,23 @@
-# Welcome to Remix!
+# My first github commit
 
-- 📖 [Remix docs](https://remix.run/docs)
+Online site: https://my-first-github-commit.vercel.app/
 
-## Development
+## Features
 
-Run the dev server:
+- Find your first github commit by username
 
-```shellscript
-npm run dev
-```
+## Tech Stack
 
-## Deployment
+- Remix 2
+- React 18
+- Tailwind
+- Shadcn UI
+- GitHub API
 
-First, build your app for production:
+## Local Development
 
-```sh
-npm run build
-```
-
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+1. Download the repo git clone `gh repo clone leochiu-a/my-first-github-commit`
+2. Change the directory cd `my-first-github-commit`
+3. Install the dependency `pnpm i`
+4. Start a development server `pnpm dev`
+5. Open your browser and visit http://localhost:5173/
