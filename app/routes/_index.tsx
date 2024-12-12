@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher, useSearchParams } from "@remix-run/react";
 import {
   File,
   Plus,
@@ -36,7 +36,10 @@ interface Commit {
 }
 
 export default function Index() {
-  const [username, setUsername] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [username, setUsername] = useState(() => {
+    return searchParams.get("username") || "";
+  });
 
   const commitHistories = useFetcher<{ commit?: Commit; message?: string }>();
   const { toast } = useToast();
@@ -47,13 +50,25 @@ export default function Index() {
     setUsername(e.target.value);
   };
 
+  const handleSubmit = () => {
+    setSearchParams({ username });
+    commitHistories.load("/commit-search?username=" + username);
+  };
+
   useEffect(() => {
     if (commitHistories.data?.message) {
       toast({
         title: commitHistories.data?.message,
       });
     }
-  }, [commitHistories.data, toast]);
+  }, [commitHistories.data?.message, toast]);
+
+  useEffect(() => {
+    if (username) {
+      commitHistories.load("/commit-search?username=" + username);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -79,9 +94,10 @@ export default function Index() {
             />
             <div className="bg-gradient-to-r h-[1px] w-full from-[#DCDCDC] to-[#707070]" />
             <ShinyButton
-              type="submit"
+              type="button"
               className="w-full mt-10 h-[60px] bg-white text-black"
               disabled={username.length === 0}
+              onClick={handleSubmit}
             >
               <div className="flex items-center gap-1 h-full justify-center">
                 Get started
