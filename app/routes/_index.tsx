@@ -147,7 +147,7 @@ export default function Index() {
                   {dayjs(commit.committedDate).format("MMMM D, YYYY hh:mm A")}
                 </p>
 
-                <div className="flex justify-between gap-4 text-xs sm:text-sm bg-[#45454566] p-4 rounded-md mt-8 sm:mt-12">
+                <div className="flex justify-between gap-1 text-xs sm:text-sm bg-[#45454566] p-4 rounded-md mt-8 sm:mt-12">
                   <span className="flex items-center gap-1">
                     <Plus className="h-4 w-4 text-green-500" />
                     <span>{commit.additions} additions</span>
@@ -167,26 +167,26 @@ export default function Index() {
 
           <div className="flex justify-between gap-8 px-6 mt-9 sm:mt-[60px] w-full">
             <a
-              className="flex flex-col items-center cursor-pointer"
+              className="flex flex-col items-center cursor-pointer group"
               href={commit.commitUrl}
               target="_blank"
               rel="noreferrer"
             >
-              <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group hover:bg-white hover:border-white transition duration-300">
+              <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
                 <SquareArrowOutUpRight className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
               </div>
               <p className="mt-2 text-white text-sm">View Commit</p>
             </a>
 
-            <div className="flex flex-col items-center cursor-pointer">
-              <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group hover:bg-white hover:border-white transition duration-300">
+            <div className="flex flex-col items-center cursor-pointer group">
+              <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
                 <Download className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
               </div>
               <p className="mt-2 text-white text-sm">Download</p>
             </div>
 
-            <div className="flex flex-col items-center cursor-pointer">
-              <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group hover:bg-white hover:border-white transition duration-300">
+            <div className="flex flex-col items-center cursor-pointer group">
+              <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
                 <Share2 className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
               </div>
               <p className="mt-2 text-white text-sm">Shared</p>
