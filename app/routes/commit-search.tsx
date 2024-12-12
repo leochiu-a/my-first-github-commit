@@ -23,10 +23,12 @@ const searchCommit = async (username: string) => {
       query {
         repository(owner: "${username}", name: "${repositoryName}") {
           defaultBranchRef {
+            name
             target {
               ... on Commit {
                 history(first: 1, after: ${cursor}) {
                   nodes {
+                    oid
                     message
                     committedDate
                     commitUrl
@@ -60,7 +62,10 @@ const searchCommit = async (username: string) => {
       }),
     });
     const { data } = await res.json();
-    return data.repository.defaultBranchRef.target.history;
+    return {
+      ...data.repository.defaultBranchRef.target.history,
+      branchName: data.repository.defaultBranchRef.name,
+    };
   };
 
   const history = await getHistory("null");
@@ -70,9 +75,15 @@ const searchCommit = async (username: string) => {
     const cursor = history.pageInfo.endCursor.split(" ");
     cursor[1] = totalCount - 2;
     const firstCommitRes = await getHistory(`"${cursor.join(" ")}"`);
-    return firstCommitRes.nodes[0];
+    return {
+      branchName: firstCommitRes.branchName,
+      ...firstCommitRes.nodes[0],
+    };
   } else {
-    return history.nodes[0];
+    return {
+      branchName: history.branchName,
+      ...history.nodes[0],
+    };
   }
 };
 
