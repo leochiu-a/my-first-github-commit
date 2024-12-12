@@ -15,6 +15,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ShinyButton from "@/components/magicui/shiny-button";
 import { useToast } from "@/hooks/use-toast";
+import isMobile from "@/lib/isMobile";
 
 export const meta: MetaFunction = () => {
   return [
@@ -53,6 +54,21 @@ export default function Index() {
   const handleSubmit = () => {
     setSearchParams({ username });
     commitHistories.load("/commit-search?username=" + username);
+  };
+
+  const handleShare = () => {
+    const url = `${window.location.origin}/?username=${username}`;
+    if (isMobile()) {
+      navigator.share({
+        title: `${username}'s first GitHub commit`,
+        url,
+      });
+    } else {
+      navigator.clipboard.writeText(url);
+      toast({
+        title: "Link copied to clipboard",
+      });
+    }
   };
 
   useEffect(() => {
@@ -185,12 +201,15 @@ export default function Index() {
               <p className="mt-2 text-white text-sm">Download</p>
             </div>
 
-            <div className="flex flex-col items-center cursor-pointer group">
+            <button
+              className="flex flex-col items-center cursor-pointer group"
+              onClick={handleShare}
+            >
               <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
                 <Share2 className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
               </div>
               <p className="mt-2 text-white text-sm">Shared</p>
-            </div>
+            </button>
           </div>
         </div>
       )}
