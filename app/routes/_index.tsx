@@ -1,4 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
+import { GitCommit, GitBranch, Clock, File, Plus, Minus } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,6 +22,8 @@ export const meta: MetaFunction = () => {
 };
 
 interface Commit {
+  branchName: string;
+  oid: string;
   additions: number;
   author: { name: string; avatarUrl: string };
   changedFilesIfAvailable: number;
@@ -72,39 +76,66 @@ export default function Index() {
         )}
 
         {commit && (
-          <Card>
+          <Card className="w-full max-w-md">
             <CardHeader className="flex flex-row items-center gap-4">
               <Avatar>
                 <AvatarImage
                   src={commit.author.avatarUrl}
                   alt={commit.author.name}
                 />
-                <AvatarFallback>{commit.author.name.charAt(0)}</AvatarFallback>
+                <AvatarFallback>
+                  {commit.author.name.substring(0, 2)}
+                </AvatarFallback>
               </Avatar>
-              <div>
-                <CardTitle className="text-lg">{commit.author.name}</CardTitle>
+              <div className="flex flex-col">
+                <CardTitle className="text-xl">
+                  My First GitHub Commit
+                </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  {commit.committedDate}
+                  @{commit.author.name}
                 </p>
               </div>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm mb-2">{commit.message}</p>
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>{commit.changedFilesIfAvailable} files changed</span>
-                <span className="flex gap-2">
-                  <span className="text-green-500">+{commit.additions}</span>
-                  <span className="text-red-500">-{commit.deletions}</span>
-                </span>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-lg font-medium line-clamp-3">
+                  {commit.message}
+                </p>
               </div>
-              <a
-                href={commit.commitUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-blue-500 hover:underline mt-2 inline-block"
-              >
-                View commit
-              </a>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <GitCommit className="h-4 w-4" />
+                <a
+                  href={commit.commitUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-500 hover:underline inline-block"
+                >
+                  <span>{commit.oid.substring(0, 7)}</span>
+                </a>
+                <GitBranch className="h-4 w-4 ml-4" />
+                <span>{commit.branchName}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                <span>Committed on {commit.committedDate}</span>
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Changes:</p>
+                <div className="flex items-center gap-4 text-sm">
+                  <span className="flex items-center gap-2">
+                    <File className="h-4 w-4 text-blue-500" />
+                    <span>{commit.changedFilesIfAvailable} files changed</span>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Plus className="h-3 w-3 text-green-500" />
+                    <span className="text-green-500">{commit.additions}</span>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Minus className="h-3 w-3 text-red-500" />
+                    <span className="text-red-500">{commit.deletions}</span>
+                  </span>
+                </div>
+              </div>
             </CardContent>
           </Card>
         )}
