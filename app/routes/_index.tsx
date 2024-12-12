@@ -80,7 +80,7 @@ export default function Index() {
             <div className="bg-gradient-to-r h-[1px] w-full from-[#DCDCDC] to-[#707070]" />
             <ShinyButton
               type="submit"
-              className="w-full mt-10 h-[60px] bg-white"
+              className="w-full mt-10 h-[60px] bg-white text-black"
               disabled={username.length === 0}
             >
               <div className="flex items-center gap-1 h-full justify-center">
