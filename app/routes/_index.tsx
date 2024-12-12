@@ -1,22 +1,25 @@
 import type { MetaFunction } from "@remix-run/node";
-import { GitCommit, GitBranch, Clock, File, Plus, Minus } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import { useFetcher, useSearchParams } from "@remix-run/react";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useFetcher } from "@remix-run/react";
+  File,
+  Plus,
+  Minus,
+  ArrowRight,
+  SquareArrowOutUpRight,
+  Download,
+  Share2,
+} from "lucide-react";
+import dayjs from "dayjs";
+import { ChangeEvent, useEffect, useState } from "react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import ShinyButton from "@/components/magicui/shiny-button";
+import { useToast } from "@/hooks/use-toast";
+import isMobile from "@/lib/isMobile";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
+    { title: "Your first GitHub commit" },
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
@@ -34,112 +37,186 @@ interface Commit {
 }
 
 export default function Index() {
-  const commitHistories = useFetcher<{ commit: Commit }>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [username, setUsername] = useState(() => {
+    return searchParams.get("username") || "";
+  });
+
+  const commitHistories = useFetcher<{ commit?: Commit; message?: string }>();
+  const { toast } = useToast();
 
   const commit = commitHistories.data?.commit;
 
+  const handleChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    setSearchParams({ username });
+    commitHistories.load("/commit-search?username=" + username);
+  };
+
+  const handleShare = () => {
+    const url = `${window.location.origin}/?username=${username}`;
+    if (isMobile()) {
+      navigator.share({
+        title: `${username}'s first GitHub commit`,
+        url,
+      });
+    } else {
+      navigator.clipboard.writeText(url);
+      toast({
+        title: "Link copied to clipboard",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (commitHistories.data?.message) {
+      toast({
+        title: commitHistories.data?.message,
+      });
+    }
+  }, [commitHistories.data?.message, toast]);
+
+  useEffect(() => {
+    if (username) {
+      commitHistories.load("/commit-search?username=" + username);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className="min-h-screen bg-slate-50 gr">
-      <div className="container mx-auto grid grid-cols-[1fr_1fr] gap-8 p-8">
-        <commitHistories.Form method="GET" action="/commit-search">
-          <Card>
-            <CardHeader>
-              <CardTitle>My First Github Commit</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Input placeholder="Your GitHub name" name="username" />
-            </CardContent>
-            <CardFooter>
-              <Button type="submit">
-                {commitHistories.state === "loading" ? "Searching" : "Search"}
-              </Button>
-            </CardFooter>
-          </Card>
-        </commitHistories.Form>
+    <>
+      {!commit && (
+        <div className="mx-auto md:max-w-[600px] relative z-10 grid self-center">
+          <commitHistories.Form
+            method="GET"
+            action="/commit-search"
+            className="grid justify-items-center mx-7 sm:mx-0"
+          >
+            <div className="mb-8">
+              <img src="/github-icon.svg" alt="github-icon" />
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-semibold bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent text-center">
+              Discover your first GitHub commit
+            </h1>
+            <input
+              placeholder="Enter GitHub username"
+              name="username"
+              className="mt-8 h-18 p-6 text-center w-full text-white bg-transparent border-0 focus:outline-none focus-visible:outline-none placeholder-[#878787] text-xl"
+              onChange={handleChangeUsername}
+              value={username}
+            />
+            <div className="bg-gradient-to-r h-[1px] w-full from-[#DCDCDC] to-[#707070]" />
+            <ShinyButton
+              type="button"
+              className="w-full mt-10 h-[60px] bg-white text-black"
+              disabled={username.length === 0}
+              onClick={handleSubmit}
+            >
+              <div className="flex items-center gap-1 h-full justify-center">
+                Get started
+                <ArrowRight />
+              </div>
+            </ShinyButton>
+          </commitHistories.Form>
+        </div>
+      )}
 
-        {commitHistories.state === "loading" && (
-          <div>
-            <Card className="p-6">
-              <div className="flex items-start gap-4">
-                <Skeleton className="h-12 w-12 rounded-full" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-[100px]" />
-                  <Skeleton className="h-4 w-[200px]" />
+      {commit && (
+        <div className="mx-auto max-w-[420px] relative z-10 grid justify-items-center my-20 sm:my-[104px]">
+          <h1 className="text-3xl font-semibold bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent w-[300px] md:w-auto text-center">
+            <span>Your first</span>
+            <span className="text-nowrap"> GitHub commit...</span>
+          </h1>
+
+          <div className="rounded-2xl mt-9 sm:mt-[60px] bg-gradient-to-r from-[#DCDCDC] to-[#707070] p-0.5 shadow-custom-white w-[300px] sm:w-[375px]">
+            <div className="bg-custom-gradient rounded-2xl pt-7 pb-8 sm:pt-12 sm:pb-10 text-white h-full">
+              <div className="grid relative w-full">
+                <div className="absolute grid justify-items-center gap-3 top-10 sm:top-14 justify-self-center">
+                  <Avatar className="w-12 h-12 sm:w-[52px] sm:h-[52px]">
+                    <AvatarImage
+                      src={commit.author.avatarUrl}
+                      alt={commit.author.name}
+                    />
+                    <AvatarFallback>
+                      {commit.author.name.substring(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <p className="text-xl">{commit.author.name}</p>
                 </div>
-              </div>
-              <div className="mt-4 space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
-              </div>
-            </Card>
-          </div>
-        )}
 
-        {commit && (
-          <Card className="w-full max-w-md">
-            <CardHeader className="flex flex-row items-center gap-4">
-              <Avatar>
-                <AvatarImage
-                  src={commit.author.avatarUrl}
-                  alt={commit.author.name}
+                <img
+                  src="/github-gradient.svg"
+                  alt="github-gradient"
+                  className="mx-auto w-[197px] h-[214px] sm:w-[221px] sm:h-[240px]"
                 />
-                <AvatarFallback>
-                  {commit.author.name.substring(0, 2)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <CardTitle className="text-xl">
-                  My First GitHub Commit
-                </CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  @{commit.author.name}
-                </p>
               </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
+
+              <div className="mx-4 sm:mx-6 text-center">
                 <p className="text-lg font-medium line-clamp-3">
-                  {commit.message}
+                  &quot; {commit.message} &quot;
                 </p>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <GitCommit className="h-4 w-4" />
-                <a
-                  href={commit.commitUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-blue-500 hover:underline inline-block"
-                >
-                  <span>{commit.oid.substring(0, 7)}</span>
-                </a>
-                <GitBranch className="h-4 w-4 ml-4" />
-                <span>{commit.branchName}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span>Committed on {commit.committedDate}</span>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Changes:</p>
-                <div className="flex items-center gap-4 text-sm">
-                  <span className="flex items-center gap-2">
-                    <File className="h-4 w-4 text-blue-500" />
-                    <span>{commit.changedFilesIfAvailable} files changed</span>
+
+                <p className="text-sm text-[#B8B8B8] mt-5">
+                  {dayjs(commit.committedDate).format("MMMM D, YYYY hh:mm A")}
+                </p>
+
+                <div className="flex justify-between gap-1 text-xs sm:text-sm bg-[#45454566] p-4 rounded-md mt-8 sm:mt-12">
+                  <span className="flex items-center gap-1">
+                    <Plus className="h-4 w-4 text-green-500" />
+                    <span>{commit.additions} additions</span>
                   </span>
                   <span className="flex items-center gap-1">
-                    <Plus className="h-3 w-3 text-green-500" />
-                    <span className="text-green-500">{commit.additions}</span>
+                    <Minus className="h-4 w-4 text-red-500" />
+                    <span>{commit.deletions} deletions</span>
                   </span>
                   <span className="flex items-center gap-1">
-                    <Minus className="h-3 w-3 text-red-500" />
-                    <span className="text-red-500">{commit.deletions}</span>
+                    <File className="h-4 w-4" />
+                    <span>{commit.changedFilesIfAvailable} files</span>
                   </span>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-    </div>
+            </div>
+          </div>
+
+          <div className="flex justify-between gap-8 px-6 mt-9 sm:mt-[60px] w-full">
+            <a
+              className="flex flex-col items-center cursor-pointer group"
+              href={commit.commitUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
+                <SquareArrowOutUpRight className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
+              </div>
+              <p className="mt-2 text-white text-sm">View Commit</p>
+            </a>
+
+            <div className="flex flex-col items-center cursor-pointer group">
+              <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
+                <Download className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
+              </div>
+              <p className="mt-2 text-white text-sm">Download</p>
+            </div>
+
+            <button
+              className="flex flex-col items-center cursor-pointer group"
+              onClick={handleShare}
+            >
+              <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
+                <Share2 className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
+              </div>
+              <p className="mt-2 text-white text-sm">Shared</p>
+            </button>
+          </div>
+        </div>
+      )}
+
+      <footer className="text-[#D0D0D0] h-fit mt-auto text-center absolute mb-6 sm:mb-10 bottom-0 left-0 right-0">
+        Built by @leochiu & Angela Hong
+      </footer>
+    </>
   );
 }

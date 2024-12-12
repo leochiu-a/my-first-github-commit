@@ -64,6 +64,16 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
       },
+      backgroundImage: {
+        "custom-gradient": `
+            linear-gradient(0deg, #1D1D1D, #1D1D1D),
+            linear-gradient(138.73deg, rgba(0, 0, 0, 0.15) 4.54%, rgba(16, 64, 4, 0.15) 40.26%, rgba(46, 117, 28, 0.15) 75.84%),
+            linear-gradient(180deg, rgba(37, 46, 35, 0.03) 58.5%, #121212 100%)
+          `,
+      },
+      boxShadow: {
+        "custom-white": "0px 4px 10px 0px rgba(255, 255, 255, 0.15)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

@@ -5,18 +5,21 @@ import { LoaderFunctionArgs } from "@remix-run/node";
  */
 const searchCommit = async (username: string) => {
   const token = process.env.GITHUB_TOKEN;
-
-  const repositoryName = await fetch(
+  const userReposData = await fetch(
     `https://api.github.com/users/${username}/repos?sort=created&direction=asc&per_page=1`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
-  ).then(async (res) => {
-    const user = await res.json();
-    return user[0].name;
-  });
+  );
+  const user = await userReposData.json();
+  let repositoryName: string;
+  if (user.length > 0) {
+    repositoryName = user[0].name;
+  } else {
+    return { code: "NOT_FOUND", message: "User not found" };
+  }
 
   const getHistory = async (cursor: string) => {
     const gql = `
@@ -89,7 +92,16 @@ const searchCommit = async (username: string) => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
+  const result = await searchCommit(url.searchParams.get("username") || "");
+
+  if (result.code === "NOT_FOUND") {
+    return {
+      commit: null,
+      message: result.message,
+    };
+  }
+
   return {
-    commit: await searchCommit(url.searchParams.get("username") || ""),
+    commit: result,
   };
 };
