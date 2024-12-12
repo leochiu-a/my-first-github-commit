@@ -12,7 +12,6 @@ import {
 import dayjs from "dayjs";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import FlickeringGrid from "@/components/magicui/flickering-grid";
 import ShinyButton from "@/components/magicui/shiny-button";
 
 export const meta: MetaFunction = () => {
@@ -40,16 +39,7 @@ export default function Index() {
   const commit = commitHistories.data?.commit;
 
   return (
-    <div className="min-h-screen bg-[#1a1b1b] flex items-center relative overflow-hidden">
-      <FlickeringGrid
-        className="z-0 absolute inset-0"
-        squareSize={4}
-        gridGap={6}
-        color="#0000001A"
-        maxOpacity={0.5}
-        flickerChance={0.1}
-      />
-
+    <>
       {!commit && (
         <div className="mx-auto md:max-w-[600px] relative z-10 grid self-center">
           <commitHistories.Form
@@ -172,6 +162,6 @@ export default function Index() {
       <footer className="text-[#D0D0D0] h-fit mt-auto text-center absolute mb-6 sm:mb-10 bottom-0 left-0 right-0">
         Built by @leochiu & Angela Hong
       </footer>
-    </div>
+    </>
   );
 }

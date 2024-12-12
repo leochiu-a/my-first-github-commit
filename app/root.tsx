@@ -8,6 +8,7 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
+import FlickeringGrid from "./components/magicui/flickering-grid";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -32,7 +33,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <div className="min-h-screen bg-[#1a1b1b] flex items-center relative overflow-hidden">
+          <FlickeringGrid
+            className="z-0 absolute inset-0"
+            squareSize={4}
+            gridGap={6}
+            color="#0000001A"
+            maxOpacity={0.5}
+            flickerChance={0.1}
+          />
+          {children}
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
