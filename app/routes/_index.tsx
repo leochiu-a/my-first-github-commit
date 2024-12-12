@@ -10,10 +10,11 @@ import {
   Share2,
 } from "lucide-react";
 import dayjs from "dayjs";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ShinyButton from "@/components/magicui/shiny-button";
+import { useToast } from "@/hooks/use-toast";
 
 export const meta: MetaFunction = () => {
   return [
@@ -37,13 +38,22 @@ interface Commit {
 export default function Index() {
   const [username, setUsername] = useState("");
 
-  const commitHistories = useFetcher<{ commit: Commit }>();
+  const commitHistories = useFetcher<{ commit?: Commit; message?: string }>();
+  const { toast } = useToast();
 
   const commit = commitHistories.data?.commit;
 
   const handleChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
+
+  useEffect(() => {
+    if (commitHistories.data?.message) {
+      toast({
+        title: commitHistories.data?.message,
+      });
+    }
+  }, [commitHistories.data, toast]);
 
   return (
     <>
