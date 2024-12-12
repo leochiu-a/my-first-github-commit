@@ -10,6 +10,7 @@ import {
   Share2,
 } from "lucide-react";
 import dayjs from "dayjs";
+import { ChangeEvent, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ShinyButton from "@/components/magicui/shiny-button";
@@ -34,9 +35,15 @@ interface Commit {
 }
 
 export default function Index() {
+  const [username, setUsername] = useState("");
+
   const commitHistories = useFetcher<{ commit: Commit }>();
 
   const commit = commitHistories.data?.commit;
+
+  const handleChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
 
   return (
     <>
@@ -57,11 +64,14 @@ export default function Index() {
               placeholder="Enter GitHub username"
               name="username"
               className="mt-8 h-18 p-6 text-center w-full text-white bg-transparent border-0 focus:outline-none focus-visible:outline-none placeholder-[#878787] text-xl"
+              onChange={handleChangeUsername}
+              value={username}
             />
             <div className="bg-gradient-to-r h-[1px] w-full from-[#DCDCDC] to-[#707070]" />
             <ShinyButton
               type="submit"
               className="w-full mt-10 h-[60px] bg-white"
+              disabled={username.length === 0}
             >
               <div className="flex items-center gap-1 h-full justify-center">
                 Get started
