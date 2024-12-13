@@ -13,10 +13,10 @@ const searchCommit = async (username: string) => {
       },
     }
   );
-  const user = await userReposData.json();
+  const repos = await userReposData.json();
   let repositoryName: string;
-  if (user.length > 0) {
-    repositoryName = user[0].name;
+  if (repos.length > 0) {
+    repositoryName = repos[0].name;
   } else {
     return { code: "NOT_FOUND", message: "User not found" };
   }
@@ -25,6 +25,9 @@ const searchCommit = async (username: string) => {
     const gql = `
       query {
         repository(owner: "${username}", name: "${repositoryName}") {
+          owner {
+            avatarUrl
+          }
           defaultBranchRef {
             name
             target {
@@ -38,10 +41,6 @@ const searchCommit = async (username: string) => {
                     additions
                     deletions
                     changedFilesIfAvailable
-                    author {
-                      name
-                      avatarUrl
-                    }
                   }
                   totalCount
                   pageInfo {
@@ -68,6 +67,7 @@ const searchCommit = async (username: string) => {
     return {
       ...data.repository.defaultBranchRef.target.history,
       branchName: data.repository.defaultBranchRef.name,
+      avatarUrl: data.repository.owner.avatarUrl,
     };
   };
 
@@ -80,11 +80,13 @@ const searchCommit = async (username: string) => {
     const firstCommitRes = await getHistory(`"${cursor.join(" ")}"`);
     return {
       branchName: firstCommitRes.branchName,
+      avatarUrl: firstCommitRes.avatarUrl,
       ...firstCommitRes.nodes[0],
     };
   } else {
     return {
       branchName: history.branchName,
+      avatarUrl: history.avatarUrl,
       ...history.nodes[0],
     };
   }

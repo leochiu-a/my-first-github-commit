@@ -28,7 +28,7 @@ interface Commit {
   branchName: string;
   oid: string;
   additions: number;
-  author: { name: string; avatarUrl: string };
+  avatarUrl: string;
   changedFilesIfAvailable: number;
   commitUrl: string;
   committedDate: string;
@@ -46,6 +46,7 @@ export default function Index() {
   const { toast } = useToast();
 
   const commit = commitHistories.data?.commit;
+  console.log(commit);
 
   const handleChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -136,15 +137,10 @@ export default function Index() {
               <div className="grid relative w-full">
                 <div className="absolute grid justify-items-center gap-3 top-10 sm:top-14 justify-self-center">
                   <Avatar className="w-12 h-12 sm:w-[52px] sm:h-[52px]">
-                    <AvatarImage
-                      src={commit.author.avatarUrl}
-                      alt={commit.author.name}
-                    />
-                    <AvatarFallback>
-                      {commit.author.name.substring(0, 2)}
-                    </AvatarFallback>
+                    <AvatarImage src={commit.avatarUrl} alt={username} />
+                    <AvatarFallback>{username.substring(0, 2)}</AvatarFallback>
                   </Avatar>
-                  <p className="text-xl">{commit.author.name}</p>
+                  <p className="text-xl">{username}</p>
                 </div>
 
                 <img
