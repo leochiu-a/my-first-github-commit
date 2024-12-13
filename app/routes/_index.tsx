@@ -47,7 +47,6 @@ export default function Index() {
   const { toast } = useToast();
 
   const commit = commitHistories.data?.commit;
-  console.log(commit);
 
   const handleChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
