@@ -8,6 +8,7 @@ import {
   SquareArrowOutUpRight,
   Download,
   Share2,
+  LoaderIcon,
 } from "lucide-react";
 import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -118,7 +119,11 @@ export default function Index() {
             >
               <div className="flex items-center gap-1 h-full justify-center">
                 Get started
-                <ArrowRight />
+                {commitHistories.state === "loading" ? (
+                  <LoaderIcon className="animate-spin" />
+                ) : (
+                  <ArrowRight />
+                )}
               </div>
             </ShinyButton>
           </commitHistories.Form>
