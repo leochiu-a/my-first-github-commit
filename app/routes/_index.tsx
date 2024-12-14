@@ -12,7 +12,8 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import dayjs from "dayjs";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { domToPng } from "modern-screenshot";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ShinyButton from "@/components/magicui/shiny-button";
@@ -59,6 +60,8 @@ export default function Index() {
   const commitHistories = useFetcherWithReset<FetcherResult>();
   const { toast } = useToast();
 
+  const ref = useRef<HTMLDivElement>(null);
+
   const commit = commitHistories.data?.commit;
 
   const handleChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +71,17 @@ export default function Index() {
   const handleSubmit = () => {
     setSearchParams({ username });
     commitHistories.load("/commit-search?username=" + username);
+  };
+
+  const handleDownload = () => {
+    if (ref.current) {
+      domToPng(ref.current, { scale: 2 }).then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "my-first-github-commit.png";
+        link.href = dataUrl;
+        link.click();
+      });
+    }
   };
 
   const handleShare = () => {
@@ -162,9 +176,12 @@ export default function Index() {
               <span className="text-nowrap"> GitHub commit...</span>
             </h1>
 
-            <div className="rounded-2xl mt-9 sm:mt-[60px] bg-gradient-to-r from-[#DCDCDC] to-[#707070] p-0.5 shadow-custom-white w-[300px] sm:w-[375px]">
+            <div
+              className="rounded-2xl mt-9 sm:mt-[60px] bg-gradient-to-r from-[#DCDCDC] to-[#707070] p-0.5 shadow-custom-white w-[300px] sm:w-[375px]"
+              ref={ref}
+            >
               <div className="bg-custom-gradient rounded-2xl pt-7 pb-8 sm:pt-12 sm:pb-10 text-white h-full">
-                <div className="grid relative w-full">
+                <div className="grid relative w-full justify-center">
                   <div className="absolute grid justify-items-center gap-3 top-10 sm:top-14 justify-self-center">
                     <Avatar className="w-12 h-12 sm:w-[52px] sm:h-[52px]">
                       <AvatarImage src={commit.avatar} alt={username} />
@@ -175,11 +192,9 @@ export default function Index() {
                     <p className="text-xl">{username}</p>
                   </div>
 
-                  <img
-                    src="/github-gradient.svg"
-                    alt="github-gradient"
-                    className="mx-auto w-[197px] h-[214px] sm:w-[221px] sm:h-[240px]"
-                  />
+                  <div className="w-[197px] h-[214px] sm:w-[221px] sm:h-[240px]">
+                    <img src="/github-gradient.svg" alt="github-gradient" />
+                  </div>
                 </div>
 
                 <div className="mx-4 sm:mx-6 text-center">
@@ -222,12 +237,15 @@ export default function Index() {
                 <p className="mt-2 text-white text-sm">View Commit</p>
               </a>
 
-              <div className="flex flex-col items-center cursor-pointer group">
+              <button
+                className="flex flex-col items-center cursor-pointer group"
+                onClick={handleDownload}
+              >
                 <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
                   <Download className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
                 </div>
                 <p className="mt-2 text-white text-sm">Download</p>
-              </div>
+              </button>
 
               <button
                 className="flex flex-col items-center cursor-pointer group"
