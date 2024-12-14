@@ -1,107 +1,74 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import axios from "axios";
 
 /**
- * https://stackoverflow.com/questions/25112141/finding-the-oldest-commit-in-a-github-repository-via-the-api
+ * https://github.com/danielroe/firstcommit.is/
  */
 const searchCommit = async (username: string) => {
-  const token = process.env.GITHUB_TOKEN;
-  const userReposData = await fetch(
-    `https://api.github.com/users/${username}/repos?sort=created&direction=asc&per_page=1`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
+  const $gh = axios.create({
+    baseURL: "https://api.github.com",
+    headers: {
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      "X-GitHub-Api-Version": "2022-11-28",
+      Accept: "application/vnd.github+json",
+    },
+  });
+
+  const [user, results] = await Promise.allSettled([
+    $gh(`/users/${username}`),
+    $gh("/search/commits", {
+      params: {
+        q: `author:${username}`,
+        order: "asc",
+        sort: "committer-date",
+        per_page: 1,
       },
-    }
-  );
-  const user = await userReposData.json();
-  let repositoryName: string;
-  if (user.length > 0) {
-    repositoryName = user[0].name;
-  } else {
-    return { code: "NOT_FOUND", message: "User not found" };
+    }),
+  ]);
+
+  if (user.status === "rejected") {
+    throw new Error("user not found");
+  }
+  if (results.status === "rejected") {
+    throw new Error("github api error");
   }
 
-  const getHistory = async (cursor: string) => {
-    const gql = `
-      query {
-        repository(owner: "${username}", name: "${repositoryName}") {
-          defaultBranchRef {
-            name
-            target {
-              ... on Commit {
-                history(first: 1, after: ${cursor}) {
-                  nodes {
-                    oid
-                    message
-                    committedDate
-                    commitUrl
-                    additions
-                    deletions
-                    changedFilesIfAvailable
-                    author {
-                      name
-                      avatarUrl
-                    }
-                  }
-                  totalCount
-                  pageInfo {
-                    endCursor
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    `;
+  const [commit] = results.value.data.items;
+  if (!commit) {
+    throw new Error("no commits to show");
+  }
 
-    const res = await fetch("https://api.github.com/graphql", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        query: gql,
-      }),
-    });
-    const { data } = await res.json();
-    return {
-      ...data.repository.defaultBranchRef.target.history,
-      branchName: data.repository.defaultBranchRef.name,
-    };
+  const stats = await $gh(commit.url);
+  const parsedUser = user.value.data;
+
+  return {
+    date: commit.commit.author.date,
+    avatar: parsedUser?.avatar_url || commit.author.avatar_url,
+    link: commit.html_url,
+    message: commit.commit.message,
+    username: parsedUser?.login || commit.author.login,
+    author: parsedUser?.name || commit.commit.author.name,
+    authorUrl: commit.author.html_url,
+    additions: stats.data.stats.additions,
+    deletions: stats.data.stats.deletions,
+    changeFiles: stats.data.files.length,
+    org: {
+      avatar: commit.repository.owner.avatar_url,
+      name: commit.repository.owner.login,
+      repository: commit.repository.full_name,
+    },
   };
-
-  const history = await getHistory("null");
-  const totalCount = history.totalCount;
-
-  if (totalCount > 1) {
-    const cursor = history.pageInfo.endCursor.split(" ");
-    cursor[1] = totalCount - 2;
-    const firstCommitRes = await getHistory(`"${cursor.join(" ")}"`);
-    return {
-      branchName: firstCommitRes.branchName,
-      ...firstCommitRes.nodes[0],
-    };
-  } else {
-    return {
-      branchName: history.branchName,
-      ...history.nodes[0],
-    };
-  }
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
-  const result = await searchCommit(url.searchParams.get("username") || "");
+  try {
+    const url = new URL(request.url);
+    const result = await searchCommit(url.searchParams.get("username") || "");
 
-  if (result.code === "NOT_FOUND") {
+    return { commit: result };
+  } catch (error) {
     return {
-      commit: null,
-      message: result.message,
+      message: error instanceof Error ? error.message : "unknown error",
     };
   }
-
-  return {
-    commit: result,
-  };
 };
