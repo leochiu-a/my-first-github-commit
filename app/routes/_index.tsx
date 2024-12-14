@@ -28,18 +28,24 @@ export const meta: MetaFunction = () => {
 };
 
 interface Commit {
-  branchName: string;
-  oid: string;
-  additions: number;
-  avatarUrl: string;
-  changedFilesIfAvailable: number;
-  commitUrl: string;
-  committedDate: string;
-  deletions: number;
+  date: string;
+  avatar: string;
+  link: string;
   message: string;
+  username: string;
+  author: string;
+  authorUrl: string;
+  org: {
+    avatar: string;
+    name: string;
+    repository: string;
+  };
+  additions: number;
+  deletions: number;
+  changeFiles: number;
 }
 
-interface FetchResult {
+interface FetcherResult {
   commit?: Commit;
   message?: string;
 }
@@ -50,7 +56,7 @@ export default function Index() {
     return searchParams.get("username") || "";
   });
 
-  const commitHistories = useFetcherWithReset<FetchResult>();
+  const commitHistories = useFetcherWithReset<FetcherResult>();
   const { toast } = useToast();
 
   const commit = commitHistories.data?.commit;
@@ -161,7 +167,7 @@ export default function Index() {
                 <div className="grid relative w-full">
                   <div className="absolute grid justify-items-center gap-3 top-10 sm:top-14 justify-self-center">
                     <Avatar className="w-12 h-12 sm:w-[52px] sm:h-[52px]">
-                      <AvatarImage src={commit.avatarUrl} alt={username} />
+                      <AvatarImage src={commit.avatar} alt={username} />
                       <AvatarFallback>
                         {username.substring(0, 2)}
                       </AvatarFallback>
@@ -182,7 +188,7 @@ export default function Index() {
                   </p>
 
                   <p className="text-sm text-[#B8B8B8] mt-5">
-                    {dayjs(commit.committedDate).format("MMMM D, YYYY hh:mm A")}
+                    {dayjs(commit.date).format("MMMM D, YYYY hh:mm A")}
                   </p>
 
                   <div className="flex justify-between gap-1 text-xs sm:text-sm bg-[#45454566] p-4 rounded-md mt-8 sm:mt-12">
@@ -196,7 +202,7 @@ export default function Index() {
                     </span>
                     <span className="flex items-center gap-1">
                       <File className="h-4 w-4" />
-                      <span>{commit.changedFilesIfAvailable} files</span>
+                      <span>{commit.changeFiles} files</span>
                     </span>
                   </div>
                 </div>
@@ -206,7 +212,7 @@ export default function Index() {
             <div className="flex justify-between gap-8 px-6 mt-9 sm:mt-[60px] w-full">
               <a
                 className="flex flex-col items-center cursor-pointer group"
-                href={commit.commitUrl}
+                href={commit.link}
                 target="_blank"
                 rel="noreferrer"
               >
