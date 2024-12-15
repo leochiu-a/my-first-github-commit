@@ -203,7 +203,7 @@ export default function Index() {
                   </p>
 
                   <p className="text-sm text-[#B8B8B8] mt-5">
-                    {dayjs(commit.date).format("MMMM D, YYYY hh:mm A")}
+                    {dayjs(commit.date).format("MMMM D, YYYY, hh:mm A")}
                   </p>
 
                   <div className="flex justify-between gap-1 text-xs sm:text-sm bg-[#45454566] p-4 rounded-md mt-8 sm:mt-12">
