@@ -199,7 +199,7 @@ export default function Index() {
 
                 <div className="mx-4 sm:mx-6 text-center">
                   <p className="text-lg font-medium line-clamp-3">
-                    &quot; {commit.message} &quot;
+                    {commit.message}
                   </p>
 
                   <p className="text-sm text-[#B8B8B8] mt-5">
