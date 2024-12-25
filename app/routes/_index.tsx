@@ -263,7 +263,22 @@ export default function Index() {
       )}
 
       <footer className="text-[#D0D0D0] h-fit mt-auto text-center absolute mb-6 sm:mb-10 bottom-0 left-0 right-0">
-        Built by @leochiu & Angela Hong
+        <a
+          href="https://github.com/leochiu-a/my-first-github-commit"
+          className="hover:underline"
+        >
+          source
+        </a>
+        <span> · </span>
+        <span>made with ❤️ by </span>
+        <a
+          href="https://www.threads.net/@leo.web.dev"
+          className="hover:underline"
+        >
+          @leochiu
+        </a>
+        <span> & </span>
+        <span>@Angela Hong</span>
       </footer>
     </>
   );
