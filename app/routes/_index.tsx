@@ -133,34 +133,34 @@ export default function Index() {
   return (
     <>
       {!commit && (
-        <div className="mx-auto md:max-w-[600px] relative z-10 grid self-center">
+        <div className="relative z-10 mx-auto grid self-center md:max-w-[600px]">
           <commitHistories.Form
             method="GET"
             action="/commit-search"
-            className="grid justify-items-center mx-7 sm:mx-0"
+            className="mx-7 grid justify-items-center sm:mx-0"
           >
             <div className="mb-8">
               <img src="/github-icon.svg" alt="github-icon" />
             </div>
-            <h1 className="text-2xl leading-8 flex flex-col sm:flex-row sm:text-4xl sm:leading-10 font-semibold bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent text-center">
+            <h1 className="flex flex-col bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-2xl font-semibold leading-8 text-transparent sm:flex-row sm:text-4xl sm:leading-10">
               <span>Discover your </span>
               <span>first GitHub commit</span>
             </h1>
             <input
               placeholder="Enter GitHub username"
               name="username"
-              className="mt-8 h-18 p-6 text-center w-full text-white bg-transparent border-0 focus:outline-none focus-visible:outline-none placeholder-[#878787] text-base sm:text-xl leading-7"
+              className="h-18 mt-8 w-full border-0 bg-transparent p-6 text-center text-base leading-7 text-white placeholder-[#878787] focus:outline-none focus-visible:outline-none sm:text-xl"
               onChange={handleChangeUsername}
               value={username}
             />
-            <div className="bg-gradient-to-r h-[1px] w-full from-[#DCDCDC] to-[#707070]" />
+            <div className="h-[1px] w-full bg-gradient-to-r from-[#DCDCDC] to-[#707070]" />
             <ShinyButton
               type="button"
-              className="w-full mt-10 h-[60px] bg-white text-black text-lg leading-7"
+              className="mt-10 h-[60px] w-full bg-white text-lg leading-7 text-black"
               disabled={username.length === 0}
               onClick={handleSubmit}
             >
-              <div className="flex items-center gap-1 h-full justify-center">
+              <div className="flex h-full items-center justify-center gap-1">
                 Get started
                 {commitHistories.state === "loading" ? (
                   <LoaderIcon className="animate-spin" />
@@ -179,22 +179,22 @@ export default function Index() {
             className="absolute left-10 top-10 cursor-pointer"
             onClick={handleBack}
           >
-            <ChevronLeft className="text-gray-100 w-8 h-8" />
+            <ChevronLeft className="h-8 w-8 text-gray-100" />
           </button>
-          <div className="mx-auto max-w-[420px] relative z-10 grid justify-items-center my-20 sm:my-[104px]">
-            <h1 className="text-3xl font-semibold bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent w-[300px] md:w-auto text-center">
+          <div className="relative z-10 mx-auto my-20 grid max-w-[420px] justify-items-center sm:my-[104px]">
+            <h1 className="w-[300px] bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-3xl font-semibold text-transparent md:w-auto">
               <span>Your first</span>
               <span className="text-nowrap"> GitHub commit...</span>
             </h1>
 
             <div
-              className="rounded-2xl mt-9 sm:mt-[60px] bg-gradient-to-r from-[#DCDCDC] to-[#707070] p-0.5 shadow-custom-white w-[328px] sm:w-[390px]"
+              className="mt-9 w-[328px] rounded-2xl bg-gradient-to-r from-[#DCDCDC] to-[#707070] p-0.5 shadow-custom-white sm:mt-[60px] sm:w-[390px]"
               ref={ref}
             >
-              <div className="bg-custom-gradient py-7 sm:pt-10 sm:pb-10 bg-white rounded-2xl text-white h-full">
-                <div className="grid relative w-full justify-center">
-                  <div className="absolute grid justify-items-center gap-3 top-12 sm:top-14 justify-self-center translate-x-[6px]">
-                    <Avatar className="w-12 h-12 sm:w-[52px] sm:h-[52px]">
+              <div className="h-full rounded-2xl bg-white bg-custom-gradient py-7 text-white sm:pb-10 sm:pt-10">
+                <div className="relative grid w-full justify-center">
+                  <div className="absolute top-12 grid translate-x-[6px] justify-items-center gap-3 justify-self-center sm:top-14">
+                    <Avatar className="h-12 w-12 sm:h-[52px] sm:w-[52px]">
                       <AvatarImage src={commit.avatar} alt={username} />
                       <AvatarFallback>
                         {username.substring(0, 2)}
@@ -203,21 +203,21 @@ export default function Index() {
                     <p className="text-xl">{username}</p>
                   </div>
 
-                  <div className="w-[232px] h-[225px]">
+                  <div className="h-[225px] w-[232px]">
                     <img src="/github-gradient.svg" alt="github-gradient" />
                   </div>
                 </div>
 
-                <div className="mx-4 sm:mx-6 text-center relative z-10">
-                  <p className="text-lg font-normal line-clamp-3">
+                <div className="relative z-10 mx-4 text-center sm:mx-6">
+                  <p className="line-clamp-3 text-lg font-normal">
                     {commit.message}
                   </p>
 
-                  <p className="text-sm text-gray-400 mt-5">
+                  <p className="mt-5 text-sm text-gray-400">
                     {dayjs(commit.date).format("MMMM D, YYYY, hh:mm A")}
                   </p>
 
-                  <div className="flex justify-between gap-1 text-xs sm:text-sm bg-[#45454566] p-4 rounded-md mt-8 sm:mt-12 text-nowrap">
+                  <div className="mt-8 flex justify-between gap-1 text-nowrap rounded-md bg-[#45454566] p-4 text-xs sm:mt-12 sm:text-sm">
                     <span className="flex items-center gap-1">
                       <Plus className="h-4 w-4 text-green-500" />
                       <span>{commit.additions} additions</span>
@@ -235,44 +235,44 @@ export default function Index() {
               </div>
             </div>
 
-            <div className="grid grid-flow-col auto-cols-fr gap-6 sm:gap-8 px-6 mt-9 sm:mt-[60px] w-full">
+            <div className="mt-9 grid w-full auto-cols-fr grid-flow-col gap-6 px-6 sm:mt-[60px] sm:gap-8">
               <a
-                className="flex flex-col items-center cursor-pointer group"
+                className="group flex cursor-pointer flex-col items-center"
                 href={commit.link}
                 target="_blank"
                 rel="noreferrer"
               >
-                <div className="w-10 h-10 flex justify-center items-center border-2 border-gray-400 rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
-                  <SquareArrowOutUpRight className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400 transition duration-300 group-hover:border-white group-hover:bg-white">
+                  <SquareArrowOutUpRight className="h-5 w-5 text-white transition duration-300 group-hover:text-black" />
                 </div>
-                <p className="mt-2 text-white text-sm">View Commit</p>
+                <p className="mt-2 text-sm text-white">View Commit</p>
               </a>
 
               <button
-                className="flex flex-col items-center cursor-pointer group"
+                className="group flex cursor-pointer flex-col items-center"
                 onClick={handleDownload}
               >
-                <div className="w-10 h-10 flex justify-center items-center border-2 border-gray-400 rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
-                  <Download className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400 transition duration-300 group-hover:border-white group-hover:bg-white">
+                  <Download className="h-5 w-5 text-white transition duration-300 group-hover:text-black" />
                 </div>
-                <p className="mt-2 text-white text-sm">Download</p>
+                <p className="mt-2 text-sm text-white">Download</p>
               </button>
 
               <button
-                className="flex flex-col items-center cursor-pointer group"
+                className="group flex cursor-pointer flex-col items-center"
                 onClick={handleShare}
               >
-                <div className="w-10 h-10 flex justify-center items-center border-2 border-gray-400 rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
-                  <Share2 className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400 transition duration-300 group-hover:border-white group-hover:bg-white">
+                  <Share2 className="h-5 w-5 text-white transition duration-300 group-hover:text-black" />
                 </div>
-                <p className="mt-2 text-white text-sm">Shared</p>
+                <p className="mt-2 text-sm text-white">Shared</p>
               </button>
             </div>
           </div>
         </>
       )}
 
-      <footer className="text-gray-400 text-xs sm:text-sm h-fit mt-auto text-center absolute mb-6 sm:mb-10 bottom-0 left-0 right-0">
+      <footer className="absolute bottom-0 left-0 right-0 mb-6 mt-auto h-fit text-center text-xs text-gray-400 sm:mb-10 sm:text-sm">
         <a
           href="https://github.com/leochiu-a/my-first-github-commit"
           className="hover:underline"

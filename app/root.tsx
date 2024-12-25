@@ -34,9 +34,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <div className="min-h-screen bg-[#1a1b1b] flex items-center relative overflow-hidden">
+        <div className="relative flex min-h-screen items-center overflow-hidden bg-[#1a1b1b]">
           <FlickeringGrid
-            className="z-0 absolute inset-0"
+            className="absolute inset-0 z-0"
             squareSize={4}
             gridGap={6}
             color="#0000001A"

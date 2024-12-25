@@ -42,13 +42,13 @@ const ShinyButton = React.forwardRef<HTMLButtonElement, ShinyButtonProps>(
         {...animationProps}
         {...props}
         className={cn(
-          "relative rounded-lg px-6 py-2 font-medium backdrop-blur-xl transition-shadow duration-300 ease-in-out hover:shadow text-[rgb(0,0,0,65%)]",
+          "relative rounded-lg px-6 py-2 font-medium text-[rgb(0,0,0,65%)] backdrop-blur-xl transition-shadow duration-300 ease-in-out hover:shadow",
           "disabled:cursor-not-allowed disabled:bg-[#2D2D2D] disabled:text-[#6C6969]",
-          className
+          className,
         )}
       >
         <span
-          className="relative block size-full text-sm sm:text-lg font-normal tracking-wide text-inherit"
+          className="relative block size-full text-sm font-normal tracking-wide text-inherit sm:text-lg"
           style={{
             maskImage:
               "linear-gradient(-75deg,hsl(var(--primary)) calc(var(--x) + 20%),transparent calc(var(--x) + 30%),hsl(var(--primary)) calc(var(--x) + 100%))",
@@ -65,7 +65,7 @@ const ShinyButton = React.forwardRef<HTMLButtonElement, ShinyButtonProps>(
         ></span>
       </motion.button>
     );
-  }
+  },
 );
 
 ShinyButton.displayName = "ShinyButton";
