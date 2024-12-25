@@ -272,7 +272,7 @@ export default function Index() {
         </>
       )}
 
-      <footer className="text-[#D0D0D0] h-fit mt-auto text-center absolute mb-6 sm:mb-10 bottom-0 left-0 right-0">
+      <footer className="text-gray-400 text-xs sm:text-sm h-fit mt-auto text-center absolute mb-6 sm:mb-10 bottom-0 left-0 right-0">
         <a
           href="https://github.com/leochiu-a/my-first-github-commit"
           className="hover:underline"
