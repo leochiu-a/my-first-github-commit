@@ -100,9 +100,19 @@ export default function Index() {
   };
 
   const handleBack = () => {
-    setSearchParams({});
-    setUsername("");
-    commitHistories.reset();
+    const back = () => {
+      setSearchParams({});
+      setUsername("");
+      commitHistories.reset();
+    };
+
+    if ("startViewTransition" in document) {
+      document.startViewTransition(() => {
+        back();
+      });
+    } else {
+      back();
+    }
   };
 
   useEffect(() => {
