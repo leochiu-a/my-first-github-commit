@@ -66,10 +66,14 @@ export default {
       },
       backgroundImage: {
         "custom-gradient": `
-            linear-gradient(0deg, #1D1D1D, #1D1D1D),
-            linear-gradient(138.73deg, rgba(0, 0, 0, 0.15) 4.54%, rgba(16, 64, 4, 0.15) 40.26%, rgba(46, 117, 28, 0.15) 75.84%),
-            linear-gradient(180deg, rgba(37, 46, 35, 0.03) 58.5%, #121212 100%)
-          `,
+          linear-gradient(
+            179.36deg,
+            rgba(0, 0, 0, 0.15) 0.55%,
+            rgba(16, 64, 4, 0.15) 24.56%,
+            rgba(46, 117, 28, 0.15) 55.99%,
+            rgba(18, 18, 18, 0.15) 99.38%
+          ),
+          linear-gradient(0deg, #1d1d1d, #1d1d1d)`,
       },
       boxShadow: {
         "custom-white": "0px 4px 10px 0px rgba(255, 255, 255, 0.15)",

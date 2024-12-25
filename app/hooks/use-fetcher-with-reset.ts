@@ -1,4 +1,8 @@
-import { FetcherWithComponents, useFetcher } from "@remix-run/react";
+import {
+  FetcherWithComponents,
+  useFetcher,
+  useSearchParams,
+} from "@remix-run/react";
 import { useEffect, useState } from "react";
 
 export type FetcherWithComponentsReset<T> = FetcherWithComponents<T> & {
@@ -10,7 +14,10 @@ export type FetcherWithComponentsReset<T> = FetcherWithComponents<T> & {
  * https://github.com/remix-run/remix/discussions/2749#discussioncomment-7276763
  */
 export function useFetcherWithReset<T>(): FetcherWithComponentsReset<T> {
-  const fetcher = useFetcher<T>();
+  const [searchParams] = useSearchParams();
+  const fetcher = useFetcher<T>({
+    key: searchParams.get("username") ?? "",
+  });
   const [data, setData] = useState(fetcher.data);
 
   useEffect(() => {
