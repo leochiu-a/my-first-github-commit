@@ -142,9 +142,9 @@ export default function Index() {
             <div className="mb-8">
               <img src="/github-icon.svg" alt="github-icon" />
             </div>
-            <h1 className="flex flex-col bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-2xl font-semibold leading-8 text-transparent sm:flex-row sm:text-4xl sm:leading-10">
+            <h1 className="flex flex-wrap justify-center gap-x-3 bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-2xl font-semibold leading-8 text-transparent sm:text-4xl sm:leading-10">
               <span>Discover your </span>
-              <span>first GitHub commit</span>
+              <span> first GitHub commit</span>
             </h1>
             <input
               placeholder="Enter GitHub username"
@@ -182,7 +182,7 @@ export default function Index() {
             <ChevronLeft className="h-8 w-8 text-gray-100" />
           </button>
           <div className="relative z-10 mx-auto my-20 grid max-w-[420px] justify-items-center sm:my-[104px]">
-            <h1 className="w-[300px] bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-3xl font-semibold text-transparent md:w-auto">
+            <h1 className="flex w-[300px] flex-wrap justify-center gap-x-2 bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-3xl font-semibold text-transparent md:w-auto">
               <span>Your first</span>
               <span className="text-nowrap"> GitHub commit...</span>
             </h1>
