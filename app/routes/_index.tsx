@@ -179,7 +179,7 @@ export default function Index() {
             className="absolute left-10 top-10 cursor-pointer"
             onClick={handleBack}
           >
-            <ChevronLeft className="text-[#D9D9D9] w-8 h-8" />
+            <ChevronLeft className="text-gray-100 w-8 h-8" />
           </button>
           <div className="mx-auto max-w-[420px] relative z-10 grid justify-items-center my-20 sm:my-[104px]">
             <h1 className="text-3xl font-semibold bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent w-[300px] md:w-auto text-center">
@@ -213,7 +213,7 @@ export default function Index() {
                     {commit.message}
                   </p>
 
-                  <p className="text-sm text-[#B8B8B8] mt-5">
+                  <p className="text-sm text-gray-400 mt-5">
                     {dayjs(commit.date).format("MMMM D, YYYY, hh:mm A")}
                   </p>
 
@@ -242,7 +242,7 @@ export default function Index() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
+                <div className="w-10 h-10 flex justify-center items-center border-2 border-gray-400 rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
                   <SquareArrowOutUpRight className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
                 </div>
                 <p className="mt-2 text-white text-sm">View Commit</p>
@@ -252,7 +252,7 @@ export default function Index() {
                 className="flex flex-col items-center cursor-pointer group"
                 onClick={handleDownload}
               >
-                <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
+                <div className="w-10 h-10 flex justify-center items-center border-2 border-gray-400 rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
                   <Download className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
                 </div>
                 <p className="mt-2 text-white text-sm">Download</p>
@@ -262,7 +262,7 @@ export default function Index() {
                 className="flex flex-col items-center cursor-pointer group"
                 onClick={handleShare}
               >
-                <div className="w-10 h-10 flex justify-center items-center border-2 border-[#B5B5B5] rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
+                <div className="w-10 h-10 flex justify-center items-center border-2 border-gray-400 rounded-full group-hover:bg-white group-hover:border-white transition duration-300">
                   <Share2 className="w-5 h-5 text-white group-hover:text-black transition duration-300" />
                 </div>
                 <p className="mt-2 text-white text-sm">Shared</p>
