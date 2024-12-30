@@ -142,7 +142,7 @@ export default function Index() {
             <div className="mb-8">
               <img src="/github-icon.svg" alt="github-icon" />
             </div>
-            <h1 className="flex flex-wrap justify-center gap-x-3 bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-2xl font-semibold leading-8 text-transparent sm:text-4xl sm:leading-10">
+            <h1 className="flex flex-wrap justify-center gap-x-3 bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-2xl font-semibold text-transparent sm:text-4xl">
               <span>Discover your </span>
               <span> first GitHub commit</span>
             </h1>
@@ -165,7 +165,7 @@ export default function Index() {
                 {commitHistories.state === "loading" ? (
                   <LoaderIcon className="animate-spin" />
                 ) : (
-                  <ArrowRight />
+                  <ArrowRight className="h-5 w-5 sm:h-7 sm:w-7" />
                 )}
               </div>
             </ShinyButton>
@@ -176,7 +176,7 @@ export default function Index() {
       {commit && (
         <>
           <button
-            className="absolute left-10 top-10 cursor-pointer"
+            className="absolute left-6 top-8 cursor-pointer sm:left-10 sm:top-10"
             onClick={handleBack}
           >
             <ChevronLeft className="h-8 w-8 text-gray-100" />
@@ -200,7 +200,7 @@ export default function Index() {
                         {username.substring(0, 2)}
                       </AvatarFallback>
                     </Avatar>
-                    <p className="text-xl">{username}</p>
+                    <p className="text-base sm:text-xl">{username}</p>
                   </div>
 
                   <div className="h-[225px] w-[232px]">
@@ -208,12 +208,12 @@ export default function Index() {
                   </div>
                 </div>
 
-                <div className="relative z-10 mx-4 text-center sm:mx-6">
-                  <p className="line-clamp-3 text-base sm:text-lg font-normal">
+                <div className="relative z-10 mx-4 -mt-0.5 text-center sm:mx-6">
+                  <p className="line-clamp-3 text-base font-normal sm:text-lg">
                     {commit.message}
                   </p>
 
-                  <p className="mt-5 text-sm text-gray-400">
+                  <p className="mt-5 text-xs text-gray-400 sm:text-sm">
                     {dayjs(commit.date).format("MMMM D, YYYY, hh:mm A")}
                   </p>
 
@@ -245,7 +245,9 @@ export default function Index() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400 transition duration-300 group-hover:border-white group-hover:bg-white">
                   <SquareArrowOutUpRight className="h-5 w-5 text-white transition duration-300 group-hover:text-black" />
                 </div>
-                <p className="mt-2 text-sm text-white">View Commit</p>
+                <p className="mt-2 text-xs text-white sm:text-sm">
+                  View Commit
+                </p>
               </a>
 
               <button
@@ -255,7 +257,7 @@ export default function Index() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400 transition duration-300 group-hover:border-white group-hover:bg-white">
                   <Download className="h-5 w-5 text-white transition duration-300 group-hover:text-black" />
                 </div>
-                <p className="mt-2 text-sm text-white">Download</p>
+                <p className="mt-2 text-xs text-white sm:text-sm">Download</p>
               </button>
 
               <button
@@ -265,7 +267,7 @@ export default function Index() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400 transition duration-300 group-hover:border-white group-hover:bg-white">
                   <Share2 className="h-5 w-5 text-white transition duration-300 group-hover:text-black" />
                 </div>
-                <p className="mt-2 text-sm text-white">Shared</p>
+                <p className="mt-2 text-xs text-white sm:text-sm">Shared</p>
               </button>
             </div>
           </div>
