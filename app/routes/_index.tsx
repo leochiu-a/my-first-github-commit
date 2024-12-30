@@ -24,7 +24,24 @@ import { useFetcherWithReset } from "@/hooks/use-fetcher-with-reset";
 export const meta: MetaFunction = () => {
   return [
     { title: "Your first GitHub commit" },
-    { name: "description", content: "Welcome to Remix!" },
+    {
+      name: "description",
+      content:
+        "Discover your GitHub origin story. Instantly find and relive the moment you made your first-ever commit. Perfect for developers seeking a nostalgic trip through their coding journey.",
+    },
+    {
+      property: "og:title",
+      content: "Your first GitHub commit",
+    },
+    {
+      property: "og:description",
+      content:
+        "Discover your GitHub origin story! Instantly find and relive the moment you made your first-ever commit. Perfect for developers seeking a nostalgic trip through their coding journey.",
+    },
+    {
+      property: "og:image",
+      content: "/og-image.jpg",
+    },
   ];
 };
 
