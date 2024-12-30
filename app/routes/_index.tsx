@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useSearchParams } from "@remix-run/react";
+import { json, useSearchParams } from "@remix-run/react";
 import {
   File,
   Plus,
@@ -21,7 +21,13 @@ import { useToast } from "@/hooks/use-toast";
 import isMobile from "@/lib/isMobile";
 import { useFetcherWithReset } from "@/hooks/use-fetcher-with-reset";
 
-export const meta: MetaFunction = () => {
+export const loader = () => {
+  return {
+    host: process.env.HOST,
+  };
+};
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
     { title: "Your first GitHub commit" },
     {
@@ -40,7 +46,7 @@ export const meta: MetaFunction = () => {
     },
     {
       property: "og:image",
-      content: "/og-image.jpg",
+      content: `${data?.host}/og-image.jpg`,
     },
   ];
 };
