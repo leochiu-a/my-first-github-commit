@@ -182,7 +182,7 @@ export default function Index() {
             <ChevronLeft className="h-8 w-8 text-gray-100" />
           </button>
           <div className="relative z-10 mx-auto my-20 grid max-w-[420px] justify-items-center sm:my-[104px]">
-            <h1 className="flex w-[300px] flex-wrap justify-center gap-x-2 bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-3xl font-semibold text-transparent md:w-auto">
+            <h1 className="flex w-[300px] flex-wrap justify-center gap-x-2 bg-gradient-to-b from-white to-white/50 bg-clip-text text-center text-2xl font-semibold text-transparent md:w-auto">
               <span>Your first</span>
               <span className="text-nowrap"> GitHub commit...</span>
             </h1>
@@ -209,7 +209,7 @@ export default function Index() {
                 </div>
 
                 <div className="relative z-10 mx-4 text-center sm:mx-6">
-                  <p className="line-clamp-3 text-lg font-normal">
+                  <p className="line-clamp-3 text-base sm:text-lg font-normal">
                     {commit.message}
                   </p>
 
